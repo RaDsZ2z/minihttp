@@ -166,12 +166,12 @@ void do_http_response(int client_sock, const char *path) {
 	std::string fileType = path;
 	fileType = getType(fileType);
 	std::cout<<"fileType:"<<fileType<<'\n';
-	if(fileType == "jpg"){
-		std::cout<<"rb:"<<'\n';
-		resource = fopen(path, "rb");
-	}else{
+	if(fileType == "html"){
 		std::cout<<"r:"<<'\n';
 		resource = fopen(path, "r");
+	}else{
+		std::cout<<"rb:"<<'\n';
+		resource = fopen(path, "rb");
 	}
 	
 	if(resource == NULL) {
@@ -194,9 +194,12 @@ int headers(int client_sock, FILE *resource, const std::string &fileType){
 	char buf[1024] = {0};
 	strcat(buf, "HTTP/1.0 200 OK\r\n");
 	strcat(buf, "Server: Martin Server\r\n");
-	if(fileType == "jpg"){
-		strcat(buf, "Content-Type: jpg\r\n");
-	}else{
+	if(fileType == "jpg") {
+		strcat(buf, "Content-Type: image/jpeg\r\n");
+	}else if(fileType == "mp4") {
+		strcat(buf, "Content-Type: video/mp4\r\n");
+	}
+	else {
 		strcat(buf, "Content-Type: text/html\r\n");
 	}
 	strcat(buf, "Connection: Close\r\n");
